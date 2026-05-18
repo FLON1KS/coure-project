@@ -1,0 +1,131 @@
+
+POST http://localhost:5202/api/hardware/cpus
+Content-Type: application/json
+
+{
+  "manufacturer": "AMD",
+  "name": "Ryzen 5 7500F",
+  "socket": "AM5",
+  "tdp": 65,
+  "coreCount": 6,
+  "price": 6500
+}
+
+### Получаем список всех процессоров из базы
+GET http://localhost:5202/api/hardware/cpus
+
+### Добавляем материнскую плату
+POST http://localhost:5202/api/hardware/motherboards
+Content-Type: application/json
+
+{
+  "manufacturer": "ASUS",
+  "name": "TUF GAMING B650-PLUS",
+  "socket": "AM5",
+  "formFactor": "ATX",
+  "ramType": "DDR5",
+  "price": 18000
+}
+
+### Добавляем оперативную память
+POST http://localhost:5202/api/hardware/rams
+Content-Type: application/json
+
+{
+  "name": "Kingston Fury Beast 32GB (2x16GB)",
+  "ramType": "DDR5",
+  "frequency": 6000,
+  "price": 5000
+}
+
+### Добавляем видеокарту
+POST http://localhost:5202/api/hardware/gpus
+Content-Type: application/json
+
+{
+  "name": "NVIDIA RTX 5060",
+  "memory": 8,
+  "recommendedPsuWattage": 550,
+  "price": 32000
+}
+
+### Добавляем блок питания
+POST http://localhost:5202/api/hardware/powersupplies
+Content-Type: application/json
+
+{
+  "name": "Chieftec Polaris 750W",
+  "wattage": 750,
+  "price": 4000
+}
+### Проверяем сборку на совместимость
+POST http://localhost:5202/api/configurator/check
+Content-Type: application/json
+
+{
+  "cpuId": 1,
+  "motherboardId": 1,
+  "ramId": 1,
+  "gpuId": 1,
+  "powerSupplyId": 1
+}
+
+### 1. Создаем новое объявление на барахолке
+POST http://localhost:5202/api/ads
+Content-Type: application/json
+
+{
+  "title": "Продам мышку Hator Quasar 2 PRO, под ремонт",
+  "description": "Перестал работать клик, в остальном идеал. Без гарантии.",
+  "price": 500,
+  "contactInfo": "@my_telegram"
+}
+
+### 2. Смотрим ленту всех объявлений
+GET http://localhost:5202/api/ads
+
+### 3. Удаляем объявление (представим, что мышку купили)
+### Укажи правильный ID в конце ссылки (например, 1, если это первое объявление)
+DELETE http://localhost:5202/api/ads/1
+### Добавляем несовместимую плату (под процессоры Intel и старую память)
+POST http://localhost:5202/api/hardware/motherboards
+Content-Type: application/json
+
+{
+  "manufacturer": "MSI",
+  "name": "PRO H610M-E",
+  "socket": "LGA1700",
+  "formFactor": "Micro-ATX",
+  "ramType": "DDR4",
+  "price": 3000
+}
+
+### Добавляем слишком слабый блок питания
+POST http://localhost:5202/api/hardware/powersupplies
+Content-Type: application/json
+
+{
+  "name": "Aerocool VX Plus 350W",
+  "wattage": 350,
+  "price": 800
+}
+
+### Регистрация Админа
+POST http://localhost:5202/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123",
+  "role": "Admin"
+}
+
+### Регистрация обычного пользователя
+POST http://localhost:5202/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "ivan",
+  "password": "qwerty",
+  "role": "User"
+}

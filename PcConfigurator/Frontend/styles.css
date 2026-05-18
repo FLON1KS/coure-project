@@ -1,0 +1,103 @@
+/* =========================================
+   БАЗОВІ СТИЛІ (Для всіх сторінок)
+========================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { background-color: #f8fafc; color: #0f172a; }
+
+/* =========================================
+   ШАПКА (Головна сторінка)
+========================================= */
+.header { background: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+.header h1 { font-size: 24px; color: #0f172a; font-weight: 700; }
+.nav-links { display: flex; align-items: center; gap: 20px; }
+.nav-links a { text-decoration: none; color: #2563eb; font-weight: 600; font-size: 15px; transition: 0.2s; }
+.nav-links a:hover { color: #1d4ed8; }
+
+.auth-widget { display: flex; align-items: center; gap: 10px; background: #f1f5f9; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; user-select: none; }
+.auth-widget:hover { background: #e2e8f0; }
+.auth-texts { display: flex; flex-direction: column; }
+#authMainText { font-weight: 600; color: #475569; font-size: 14px; white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
+#authSubText { font-size: 11px; font-weight: bold; color: #ef4444; margin-top: 2px; text-align: left; }
+#authSubText:hover { text-decoration: underline; }
+
+/* =========================================
+   ГОЛОВНА СТОРІНКА (index.html)
+========================================= */
+.main-content { max-width: 1400px; margin: 30px auto; padding: 0 20px; }
+
+/* Панель категорій */
+/* Панель категорій */
+.tabs { 
+    display: flex; 
+    gap: 10px; 
+    margin-bottom: 20px; 
+    flex-wrap: nowrap; 
+    background: white; 
+    padding: 15px; 
+    border-radius: 12px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02); 
+    overflow-x: auto; 
+}
+
+/* Кнопки категорій */
+.tab-btn { 
+    flex: 1; /* Рівномірно розтягує кнопки на всю ширину контейнера */
+    text-align: center; /* Центрує текст всередині розтягнутої кнопки */
+    padding: 10px 5px; /* Трохи зменшили бокові відступи, щоб точно влізло */
+    border: none; 
+    background: #f1f5f9; 
+    color: #475569; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    transition: 0.2s; 
+    white-space: nowrap; 
+}
+.tab-btn:hover { background: #e2e8f0; }
+.tab-btn.active { background: #2563eb; color: white; }
+
+/* Фільтри */
+.filters { background: white; padding: 20px; border-radius: 12px; display: flex; gap: 20px; align-items: flex-end; margin-bottom: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); flex-wrap: wrap; }
+.filter-group { display: flex; flex-direction: column; gap: 5px; }
+.filter-group label { font-size: 13px; font-weight: 600; color: #64748b; }
+.filter-group input { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; width: 150px; outline: none; }
+.filter-group input:focus { border-color: #2563eb; }
+#applyBtn { padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; height: 39px; }
+#applyBtn:hover { background: #1d4ed8; }
+
+/* Картки товарів */
+.market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+.item-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; position: relative; transition: transform 0.2s; }
+.item-card:hover { transform: translateY(-5px); }
+.badge { position: absolute; top: 10px; right: 10px; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+.item-name { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: #0f172a; line-height: 1.4; }
+.item-price { font-size: 20px; color: #2563eb; font-weight: 800; margin-bottom: 10px; }
+.item-desc { font-size: 13px; color: #64748b; line-height: 1.5; flex-grow: 1; }
+
+/* =========================================
+   СТОРІНКА ВХОДУ (login.html)
+========================================= */
+.login-body { display: flex; justify-content: center; align-items: center; height: 100vh; }
+.auth-container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
+.auth-container h2 { margin-bottom: 24px; color: #0f172a; font-size: 24px; }
+.auth-input { width: 100%; padding: 12px; margin-bottom: 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; outline: none; transition: 0.2s; }
+.auth-input:focus { border-color: #2563eb; }
+.auth-btn { width: 100%; padding: 14px; background: #2563eb; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-bottom: 10px; }
+.auth-btn:hover { background: #1d4ed8; }
+.auth-btn-secondary { background: #f1f5f9; color: #475569; }
+.auth-btn-secondary:hover { background: #e2e8f0; }
+.back-link { display: inline-block; margin-top: 15px; color: #64748b; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.2s; }
+.back-link:hover { color: #2563eb; }
+
+/* =========================================
+   СТОРІНКА ОГОЛОШЕНЬ (ads.html)
+========================================= */
+.ads-body { padding: 40px 20px; }
+.ad-form-container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.ad-form-container h2 { margin-bottom: 20px; font-size: 24px; color: #0f172a; }
+.ad-label { display: block; margin-bottom: 8px; font-weight: 600; color: #475569; font-size: 14px; }
+.ad-input { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; transition: 0.2s; }
+.ad-input:focus { border-color: #2563eb; }
+.ad-submit-btn { width: 100%; padding: 14px; background: #2563eb; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+.ad-submit-btn:hover { background: #1d4ed8; }
+#adsList { max-width: 800px; margin: 0 auto; }
