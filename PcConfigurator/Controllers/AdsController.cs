@@ -1,66 +1,85 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PcConfigurator.Models;
-using Microsoft.AspNetCore.Authorization; // Для [Authorize]
+using PcConfigurator.Services;
+using PcConfigurator.ViewModels;
 
-namespace PcConfigurator.Controllers
+namespace PcConfigurator.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AdsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AdsController : ControllerBase
+    private readonly AdsService _adsService;
+
+    public AdsController(AdsService adsService)
     {
-        private readonly AppDbContext _context;
+        _adsService = adsService;
+    }
 
-        public AdsController(AppDbContext context) => _context = context;
+    [HttpGet]
+    public async Task<IActionResult> GetAllAds()
+    {
+        var ads = await _adsService.GetAllAdsAsync();
+        return Ok(new ApiResponse<List<HardwareAd>>(ads));
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllAds()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAdForEdit(int id)
+    {
+        var ad = await _adsService.GetEditorAsync(id);
+        if (ad == null)
         {
-            var ads = await _context.HardwareAds.OrderByDescending(a => a.CreatedAt).ToListAsync();
-            return Ok(new ApiResponse<List<HardwareAd>>(ads));
+            return NotFound(ApiResponse<object>.Error("Оголошення не знайдено."));
         }
 
-        // [Authorize] означає, що сюди пропустить тільки з дійсним JWT токеном
-        [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> CreateAd([FromBody] HardwareAd newAd)
-        {
-            // Магія JWT: Сервер сам розшифровує токен і дістає з нього ім'я! (Без звернення до БД)
-            newAd.OwnerUsername = User.Identity?.Name ?? "Гість";
+        return Ok(new ApiResponse<AdEditorViewModel>(ad));
+    }
 
-            _context.HardwareAds.Add(newAd);
-            await _context.SaveChangesAsync();
-            return Ok(new ApiResponse<HardwareAd>(newAd, "Оголошення успішно створено"));
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> CreateAd([FromBody] AdRequest request)
+    {
+        string owner = User.Identity?.Name ?? "Гість";
+        var result = await _adsService.CreateAsync(request, owner);
+        return ToActionResult(result);
+    }
+
+    [Authorize]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateAd(int id, [FromBody] AdRequest request)
+    {
+        var result = await _adsService.UpdateAsync(id, request, User.Identity?.Name, GetCurrentRole());
+        return ToActionResult(result);
+    }
+
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAd(int id)
+    {
+        var result = await _adsService.DeleteAsync(id, User.Identity?.Name, GetCurrentRole());
+        return ToActionResult(result);
+    }
+
+    private string? GetCurrentRole()
+    {
+        return User.IsInRole("Admin") ? "Admin" : "User";
+    }
+
+    private IActionResult ToActionResult<T>(ServiceResult<T> result)
+    {
+        if (result.Success && result.Data != null)
+        {
+            return Ok(new ApiResponse<T>(result.Data, result.Message));
         }
 
-  [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAd(int id, [FromBody] HardwareAd updatedAd)
+        var error = ApiResponse<object>.Error(result.Message);
+
+        return result.StatusCode switch
         {
-            var ad = await _context.HardwareAds.FindAsync(id);
-            if (ad == null) return NotFound(ApiResponse<object>.Error("Оголошення не знайдено."));
-
-            // Перевіряємо, чи має користувач права на редагування (Адмін або власник)
-            if (!User.IsInRole("Admin") && ad.OwnerUsername != User.Identity?.Name)
-            {
-                return StatusCode(403, ApiResponse<object>.Error("Ви можете редагувати лише власні оголошення."));
-            }
-
-            // Оновлюємо дані
-            ad.Title = updatedAd.Title;
-            ad.Description = updatedAd.Description;
-            ad.Price = updatedAd.Price;
-            ad.ContactInfo = updatedAd.ContactInfo;
-            ad.Category = updatedAd.Category;
-            
-            // Оновлюємо картинку ТІЛЬКИ якщо користувач завантажив нову
-            if (!string.IsNullOrEmpty(updatedAd.ImageBase64))
-            {
-                ad.ImageBase64 = updatedAd.ImageBase64; 
-            }
-
-            await _context.SaveChangesAsync();
-            return Ok(new ApiResponse<HardwareAd>(ad, "Оголошення успішно оновлено."));
-        }
+            403 => StatusCode(403, error),
+            404 => NotFound(error),
+            _ => BadRequest(error)
+        };
     }
 }

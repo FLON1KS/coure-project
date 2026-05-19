@@ -13,7 +13,6 @@ namespace PcConfigurator.Migrations
     [Migration("20260517175009_OOPArchitecture")]
     partial class OOPArchitecture
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

@@ -1,0 +1,45 @@
+@using System.Globalization
+@model AdsListViewModel
+
+@if (Model.Ads.Count == 0)
+{
+    <p style="text-align: center; color: #64748b;">Оголошень не знайдено.</p>
+}
+else
+{
+    foreach (var ad in Model.Ads)
+    {
+        string date = ad.CreatedAt.HasValue
+            ? ad.CreatedAt.Value.ToString("d", new CultureInfo("uk-UA"))
+            : string.Empty;
+
+        <div class="ad-card" style="position:relative; background:white; padding:20px; padding-bottom:45px; border-radius:12px; box-shadow:0 4px 6px rgba(0,0,0,0.05); margin-bottom:20px;">
+            @if (ad.CanEditDelete)
+            {
+                <div style="position:absolute; top:10px; right:10px; display:flex; gap:8px; z-index: 10;">
+                    <button onclick="adsManager.openEdit(@ad.Id)" style="background:#f59e0b; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; font-size:13px;">Редагувати</button>
+                    <button onclick="adsManager.deleteAd(@ad.Id)" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; font-size:13px;">Видалити</button>
+                </div>
+            }
+
+            @if (ad.Images.Count > 0)
+            {
+                <div style="display:flex; gap:10px; overflow-x:auto; margin-bottom:15px; padding-bottom:8px;">
+                    @foreach (var image in ad.Images)
+                    {
+                        <img src="@image" style="height:200px; min-width:200px; max-width: 250px; object-fit:cover; border-radius:8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    }
+                </div>
+            }
+
+            <h3 style="margin:0 0 10px 0; color:#0f172a; padding-right: 160px;">@ad.Title</h3>
+            <p style="color:#475569; margin:10px 0; line-height: 1.5;">@ad.Description</p>
+            <div style="font-size:20px; font-weight:800; color:#2563eb; margin-bottom:15px;">@ad.Price.ToString("0.##") грн</div>
+            <div style="font-size:13px; color:#64748b;">📞 Контакт: @ad.ContactInfo <br> 🕒 Додано: @date <br> 👤 Продавець: <b style="color: #0f172a;">@ad.OwnerUsername</b></div>
+
+            <span style="position: absolute; bottom: 15px; right: 15px; background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin: 0;">
+                @ad.CategoryLabel
+            </span>
+        </div>
+    }
+}

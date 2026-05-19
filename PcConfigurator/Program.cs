@@ -1,52 +1,59 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PcConfigurator.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Додаємо контролери
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
 
-// Додаємо підключення до бази даних SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=pc_configurator.db"));
 
-// НАЛАШТУВАННЯ JWT АВТОРИЗАЦІЇ 
-var secretKey = "SuperSecretKeyForMyUniversityProject2026!"; // Секретний ключ сервера
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<AdsService>();
+builder.Services.AddScoped<MarketService>();
+builder.Services.AddScoped<HardwareCatalogService>();
+builder.Services.AddSingleton<ImageJsonService>();
+builder.Services.AddSingleton<HardwareLogService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false, 
-            ValidateAudience = false, 
-            ValidateLifetime = true, 
-            ValidateIssuerSigningKey = true, 
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthSettings.SecretKey))
         };
     });
+
 builder.Services.AddAuthorization();
 
-// Налаштування CORS 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();
 
 app.UseCors("AllowAll");
+app.UseStaticFiles();
 
-app.UseAuthentication(); // Хто  такий?
-app.UseAuthorization();  // Чи є  права?
-
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Page}/{action=Index}/{id?}");
+
 app.Run();

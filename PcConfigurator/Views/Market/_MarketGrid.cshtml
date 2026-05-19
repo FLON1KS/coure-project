@@ -1,0 +1,45 @@
+@model MarketGridViewModel
+
+@if (Model.Items.Count == 0)
+{
+    <p style="grid-column: 1 / -1; text-align: center; color: #64748b; margin-top: 40px; font-size: 18px;">За вашим запитом нічого не знайдено 😔</p>
+}
+else
+{
+    foreach (var item in Model.Items)
+    {
+        string badgeStyle = $"position: absolute; top: auto; bottom: 15px; right: 15px; left: auto; z-index: 5; margin: 0; {(item.IsAd ? "background: #e0f2fe; color: #0369a1;" : "background: #f1f5f9; color: #475569;")}";
+        string cardBorder = item.IsAd ? "border-left: 4px solid #0284c7;" : "";
+
+        <div class="item-card" style="cursor: pointer; padding-bottom: 45px; @cardBorder" onclick="marketplaceApp.openDetails('@item.Key')">
+            @if (item.CanEditDelete)
+            {
+                <div style="position:absolute; top:10px; right:10px; display:flex; gap:8px; z-index: 10;">
+                    <button onclick="event.stopPropagation(); marketplaceApp.openEdit(@item.Id)" style="background:#f59e0b; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; font-size:13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Редагувати</button>
+                    <button onclick="event.stopPropagation(); marketplaceApp.deleteAd(@item.Id)" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; font-size:13px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Видалити</button>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(item.FirstImage))
+            {
+                <img src="@item.FirstImage" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;" alt="Фото">
+            }
+            else
+            {
+                <div style="width: 100%; height: 180px; background: #f1f5f9; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 40px;">💻</div>
+            }
+
+            <p class="item-name">@item.Title</p>
+            <p class="item-price">@item.Price.ToString("N0") грн.</p>
+            <div class="item-desc">
+                @if (!string.IsNullOrWhiteSpace(item.TechnicalSpecs))
+                {
+                    <span style="color: #0f172a; font-weight: 600;">⚙️ @item.TechnicalSpecs</span><br><br>
+                }
+                @(item.Description ?? "Нове комплектуюче з офіційного каталогу.")
+            </div>
+
+            <span class="badge" style="@badgeStyle">@item.CategoryLabel</span>
+        </div>
+    }
+}

@@ -1,0 +1,74 @@
+@model MarketPageViewModel
+@{
+    Layout = null;
+
+    string tabName(string code) => code switch
+    {
+        "cpu" => "Процесори",
+        "mb" => "Мат. плати",
+        "ram" => "ОЗУ",
+        "gpu" => "Відеокарти",
+        "psu" => "Блоки живлення",
+        "ssd" => "SSD",
+        "case" => "Корпуси",
+        "cooler" => "Охолодження",
+        "headset" => "Гарнітури",
+        _ => "Товари"
+    };
+}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Market - Головна</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1>Hardware Market</h1>
+        <div class="nav-links">
+            <a href="/ads.html" class="...">➕ Створити оголошення</a>
+
+            <div class="auth-widget" id="authWidget" onclick="toggleAuth()">
+                <svg id="userIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <div class="auth-texts">
+                    <span id="authMainText">Увійти / Зареєструватися</span>
+                    <span id="authSubText" style="display:none;">Вийти</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="tabs">
+            <button class="tab-btn active" data-type="all">Усі товари</button>
+            @foreach (var category in Model.Categories)
+            {
+                <button class="tab-btn" data-type="@category.Code">@tabName(category.Code)</button>
+            }
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Мінімальна ціна</label>
+                <input type="number" id="minPrice" placeholder="0" min="0" oninput="if(this.value < 0) this.value = 0;">
+            </div>
+            <div class="filter-group">
+                <label>Максимальна ціна</label>
+                <input type="number" id="maxPrice" placeholder="99999" min="0" oninput="if(this.value < 0) this.value = 0;">
+            </div>
+            <button id="applyBtn">Застосувати фільтр</button>
+        </div>
+
+        <div class="market-grid" id="marketGrid"></div>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>

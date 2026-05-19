@@ -1,5 +1,5 @@
 
-POST http://localhost:5202/api/hardware/cpus
+POST http://localhost:5000/api/hardware/cpus
 Content-Type: application/json
 
 {
@@ -12,10 +12,10 @@ Content-Type: application/json
 }
 
 ### Получаем список всех процессоров из базы
-GET http://localhost:5202/api/hardware/cpus
+GET http://localhost:5000/api/hardware/cpus
 
 ### Добавляем материнскую плату
-POST http://localhost:5202/api/hardware/motherboards
+POST http://localhost:5000/api/hardware/motherboards
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
 }
 
 ### Добавляем оперативную память
-POST http://localhost:5202/api/hardware/rams
+POST http://localhost:5000/api/hardware/rams
 Content-Type: application/json
 
 {
@@ -39,7 +39,7 @@ Content-Type: application/json
 }
 
 ### Добавляем видеокарту
-POST http://localhost:5202/api/hardware/gpus
+POST http://localhost:5000/api/hardware/gpus
 Content-Type: application/json
 
 {
@@ -50,7 +50,7 @@ Content-Type: application/json
 }
 
 ### Добавляем блок питания
-POST http://localhost:5202/api/hardware/powersupplies
+POST http://localhost:5000/api/hardware/powersupplies
 Content-Type: application/json
 
 {
@@ -59,7 +59,7 @@ Content-Type: application/json
   "price": 4000
 }
 ### Проверяем сборку на совместимость
-POST http://localhost:5202/api/configurator/check
+POST http://localhost:5000/api/configurator/check
 Content-Type: application/json
 
 {
@@ -71,7 +71,7 @@ Content-Type: application/json
 }
 
 ### 1. Создаем новое объявление на барахолке
-POST http://localhost:5202/api/ads
+POST http://localhost:5000/api/ads
 Content-Type: application/json
 
 {
@@ -82,13 +82,13 @@ Content-Type: application/json
 }
 
 ### 2. Смотрим ленту всех объявлений
-GET http://localhost:5202/api/ads
+GET http://localhost:5000/api/ads
 
 ### 3. Удаляем объявление (представим, что мышку купили)
 ### Укажи правильный ID в конце ссылки (например, 1, если это первое объявление)
-DELETE http://localhost:5202/api/ads/1
+DELETE http://localhost:5000/api/ads/1
 ### Добавляем несовместимую плату (под процессоры Intel и старую память)
-POST http://localhost:5202/api/hardware/motherboards
+POST http://localhost:5000/api/hardware/motherboards
 Content-Type: application/json
 
 {
@@ -101,7 +101,7 @@ Content-Type: application/json
 }
 
 ### Добавляем слишком слабый блок питания
-POST http://localhost:5202/api/hardware/powersupplies
+POST http://localhost:5000/api/hardware/powersupplies
 Content-Type: application/json
 
 {
@@ -111,7 +111,7 @@ Content-Type: application/json
 }
 
 ### Регистрация Админа
-POST http://localhost:5202/api/auth/register
+POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
@@ -121,7 +121,7 @@ Content-Type: application/json
 }
 
 ### Регистрация обычного пользователя
-POST http://localhost:5202/api/auth/register
+POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {

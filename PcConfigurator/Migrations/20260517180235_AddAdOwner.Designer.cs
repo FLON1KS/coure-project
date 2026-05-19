@@ -13,7 +13,6 @@ namespace PcConfigurator.Migrations
     [Migration("20260517180235_AddAdOwner")]
     partial class AddAdOwner
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

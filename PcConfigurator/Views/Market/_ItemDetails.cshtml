@@ -1,0 +1,68 @@
+@using System.Globalization
+@using System.Text.Json
+@model MarketItemViewModel
+@{
+    string dateText = Model.CreatedAt.HasValue
+        ? Model.CreatedAt.Value.ToString("d", new CultureInfo("uk-UA"))
+        : string.Empty;
+
+    string badgeBackground = Model.IsAd ? "#e0f2fe" : "#f1f5f9";
+    string badgeColor = Model.IsAd ? "#0369a1" : "#475569";
+}
+
+<div style="background: white; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative; transform: translateY(0); transition: transform 0.2s; font-family: 'Inter', sans-serif;">
+    <button onclick="marketplaceApp.closeDetails()" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; z-index: 10; font-weight: bold;">✕</button>
+
+    @if (Model.Images.Count > 0)
+    {
+        <div id="detailsGallery" data-images='@Html.Raw(JsonSerializer.Serialize(Model.Images))' style="position: relative; width: 100%; height: 350px; background: #f8fafc; display: flex; align-items: center; justify-content: center;">
+            <img id="detailsImage" src="@Model.Images[0]" style="width: 100%; height: 100%; object-fit: contain;">
+            @if (Model.Images.Count > 1)
+            {
+                <button onclick="marketplaceApp.prevDetailImage(event)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.8); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 18px;">❮</button>
+                <button onclick="marketplaceApp.nextDetailImage(event)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.8); border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 18px;">❯</button>
+                <div id="detailsCounter" style="position: absolute; bottom: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px;">1 / @Model.Images.Count</div>
+            }
+        </div>
+    }
+
+    <div style="padding: 24px;">
+        <span style="background: @badgeBackground; color: @badgeColor; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-bottom: 12px; display: inline-block;">@Model.CategoryLabel</span>
+        <h2 style="margin: 0 0 10px 0; font-size: 22px; color: #0f172a; line-height: 1.3;">@Model.Title</h2>
+        <div style="font-size: 28px; font-weight: 800; color: #2563eb; margin-bottom: 20px;">@Model.Price.ToString("N0") грн.</div>
+        <p style="color: #475569; line-height: 1.6; margin-bottom: 24px; font-size: 15px; white-space: pre-wrap;">@(Model.Description ?? "Опис відсутній. Це нове комплектуюче з офіційного каталогу магазину.")</p>
+        <div style="background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 14px; color: #0f172a;">
+            <h4 style="margin: 0 0 10px 0; color: #475569; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">Характеристики та контакти</h4>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                @if (!string.IsNullOrWhiteSpace(Model.Socket))
+                {
+                    <div><span style="color:#64748b; width:120px; display:inline-block;">Сокет:</span> <b>@Model.Socket</b></div>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.RamType))
+                {
+                    <div><span style="color:#64748b; width:120px; display:inline-block;">Тип пам'яті:</span> <b>@Model.RamType</b></div>
+                }
+                @if (Model.Capacity.HasValue)
+                {
+                    <div><span style="color:#64748b; width:120px; display:inline-block;">Об'єм:</span> <b>@Model.Capacity GB</b></div>
+                }
+                @if (Model.IsAd)
+                {
+                    <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 8px 0;">
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.OwnerUsername))
+                {
+                    <div><span style="color:#64748b; width:120px; display:inline-block;">👤 Продавець:</span> <b>@Model.OwnerUsername</b></div>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.ContactInfo))
+                {
+                    <div><span style="color:#64748b; width:120px; display:inline-block;">📞 Зв'язок:</span> <b style="color:#2563eb;">@Model.ContactInfo</b></div>
+                }
+                @if (!string.IsNullOrWhiteSpace(dateText))
+                {
+                    <div><span style="color:#64748b; width:120px; display:inline-block;">🕒 Додано:</span> <b>@dateText</b></div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

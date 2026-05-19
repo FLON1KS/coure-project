@@ -1,0 +1,68 @@
+@model AdsPageViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Market - Оголошення</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="ads-body">
+
+    <a href="/index.html" class="back-link" style="display: block; text-align: center; margin-bottom: 20px;">⬅ Повернутися на головну</a>
+
+    <div class="ad-form-container">
+        <h2>Додати оголошення</h2>
+        <form id="addAdForm">
+            <label class="ad-label">Назва деталі (що продаєте?)</label>
+            <input type="text" id="adTitle" class="ad-input" placeholder="Наприклад: Навушники Philips SHP9500" required>
+
+            <label class="ad-label">Опис та стан</label>
+            <textarea id="adDesc" class="ad-input" rows="4" placeholder="Ідеальний стан, повний комплект..." required></textarea>
+
+            <label class="ad-label">Ціна (грн)</label>
+            <input type="number" id="adPrice" class="ad-input" required>
+
+            <label class="ad-label">Контакти для зв'язку</label>
+            <input type="text" id="adContact" class="ad-input" placeholder="@("@telegram_username") або номер телефону" required>
+
+            <label class="ad-label">Тип комплектуючого</label>
+            <select id="adCategory" class="ad-input">
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Code">@category.FullName</option>
+                }
+            </select>
+
+            <label class="ad-label">Фотографії товару (додайте одне або кілька)</label>
+
+            <div id="createImagePreviews" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;"></div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="adPhoto" style="display: inline-block; padding: 10px 15px; background: #e2e8f0; color: #475569; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s;">
+                    + Додати фото
+                </label>
+                <input type="file" id="adPhoto" accept="image/*" multiple style="display: none;">
+            </div>
+
+            <button type="submit" class="ad-submit-btn">Опублікувати</button>
+        </form>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 40px auto 20px auto;">
+        <h2 style="margin-bottom: 0;">Свіжі оголошення</h2>
+        <div>
+            <button id="showAllAdsBtn" style="padding: 8px 16px; background: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;">Всі оголошення</button>
+            <button id="showMyAdsBtn" style="padding: 8px 16px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer;">Мої оголошення</button>
+        </div>
+    </div>
+
+    <div id="adsList"></div>
+
+    <script src="/ads.js"></script>
+</body>
+</html>

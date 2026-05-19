@@ -4,10 +4,8 @@
 
 namespace PcConfigurator.Migrations
 {
-    /// <inheritdoc />
     public partial class AddAdOwner : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
@@ -18,7 +16,6 @@ namespace PcConfigurator.Migrations
                 defaultValue: "");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
